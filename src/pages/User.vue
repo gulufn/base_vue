@@ -2,88 +2,48 @@
 export default { name: 'User' }
 </script>
 <script setup lang="ts">
-// import { ref, reactive } from 'vue'
-// import Login from '@/components/user/Login.vue'
-// import Profile from '@/components/user/Profile.vue'
-// import { getToken, setToken, removeToken } from '@/utils/auth'
-// import axios from 'axios'
-// import { API_BASE } from '@/config.ts'
-// import { emailStore } from '@/stores/user_data'
+import { ref, reactive } from 'vue'
+import Login from '@/components/user/Login.vue'
+import Profile from '@/components/user/Profile.vue'
+import { getToken, setToken, removeToken } from '@/utils/auth'
+import { API_BASE } from '@/config.ts'
+import { emailStore } from '@/stores/user_data'
+import request from '@/utils/http'
 
 
-// const store = emailStore()
-// let isLoggedIn = ref(false)
-// let isprofileIn = ref(false)
+const store = emailStore()
 
-// async function verify_token() {
-// 	let url = `${API_BASE}` + '/user/verify_token?token=' + getToken()
-// 	let data = await axios.get(url)
+
+async function verify_token() {
+	let url = `${API_BASE}` + '/user/verify_token'         //?token=' + getToken()
+	let data = await request.get(url)
 	
-// 	if (data.data.status == 0) {
-// 		isLoggedIn.value = true
-// 		isprofileIn.value = false
-// 	} else {
-// 		store.email = data.data.data['email']
-// 		isLoggedIn.value = false
-// 		isprofileIn.value = true
-// 	}
-// 	console.log(data.data.status)
-// }
-// verify_token()
+	if (data.data.status == 1) {
+		store.isLoggedIn = true
+		store.email = data.data.data['email']
+	} else {
+		store.isLoggedIn = false
+	}
+}
+//检测到没有登录才验证token
+if(!store.isLoggedIn){
+	verify_token()
+}
+
+
+
 </script>
 
 <template>
-	<div>
-		我的
-		<h1>我的测试</h1>
-		<h1>我的测试</h1>
-		<h1>我的测试</h1>
-		<h1>我的测试</h1>
-		<h1>我的测试</h1>
-		<h1>我的测试</h1>
-		<h1>我的测试</h1>
-		<h1>我的测试</h1>
-		<h1>我的测试</h1>
-		<h1>我的测试</h1>
-		<h1>我的测试</h1>
-		<h1>我的测试</h1>
-		<h1>我的测试</h1>
-		<h1>我的测试</h1>
-		<h1>我的测试</h1>
-		<h1>我的测试</h1>
-		<h1>我的测试</h1>
-		<h1>我的测试</h1>
-		<h1>我的测试</h1>
-		<h1>我的测试</h1>
-		<h1>我的测试</h1>
-		<h1>我的测试</h1>
-		<h1>我的测试</h1>
-		<h1>我的测试</h1>
-		<h1>我的测试</h1>
-		<h1>我的测试</h1>
-		<h1>我的测试</h1>
-		<h1>我的测试</h1>
-		<h1>我的测试</h1>
-		<h1>我的测试</h1>
-		<h1>我的测试</h1>
-		<h1>我的测试</h1>
-		<h1>我的测试</h1>
-		<h1>我的测试</h1>
-		<h1>我的测试</h1>
-		<h1>我的测试</h1>
-		<h1>我的测试</h1>
-		<h1>我的测试</h1>
-		<h1>我的测试</h1>
-		<h1>我的测试</h1>
-		<h1>我的测试</h1>
-		<h1>我的测试</h1>
-		<h1>我的测试</h1>
-		<h1>我的测试</h1>
-		<h1>我的测试</h1>
-		<h1>我的测试</h1>
-		<h1>我的测试</h1>
-		<h1>我的测试</h1>
+	<div class="page">
+		<Profile v-if="store.isLoggedIn" />
+		<Login v-else/>
 	</div>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.page{
+	height: 100%;
+	overflow-y: auto; // 中间滚动
+}
+</style>

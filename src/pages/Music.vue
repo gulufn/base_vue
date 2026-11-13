@@ -2,6 +2,10 @@
 export default { name: 'Music' }
 </script>
 <script setup lang="ts">
+import request from '@/utils/http'
+import { API_BASE } from '@/config.ts'
+
+
 
 </script>
 
@@ -61,7 +65,7 @@ export default { name: 'Music' }
 
 <style lang="scss" scoped>
 .page {
-	// height: 100%;
-	// overflow-y: auto; // 中间滚动
+	height: 100%;
+	overflow-y: auto; // 中间滚动
 }
 </style>

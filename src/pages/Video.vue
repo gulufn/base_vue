@@ -6,7 +6,7 @@ export default { name: 'Video' }
 </script>
 
 <template>
-	<div>
+	<div class="page">
 		视频
 		<h1>视频测试</h1>
 		<h1>视频测试</h1>
@@ -59,4 +59,9 @@ export default { name: 'Video' }
 	</div>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.page{
+	height: 100%;
+	overflow-y: auto; // 中间滚动
+}
+</style>

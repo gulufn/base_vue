@@ -3,14 +3,13 @@ export default { name: 'Login' }
 </script>
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
-import axios from 'axios'
 import { useRouter } from 'vue-router'
 import { API_BASE } from '@/config.ts'
 import { setToken } from '@/utils/auth'
 import { showSuccessToast, showFailToast } from 'vant';
 import 'vant/es/toast/style'  // 样式也要手动引入
 import { NCard, NTabs, NTabPane, NForm, NFormItemRow, NButton, NInput } from "naive-ui";
-
+import request from '@/utils/http'
 
 const showPassword = ref(false);
 const router = useRouter()
@@ -29,7 +28,7 @@ let register_picture_captcha_url = ref<string>('')
 
 // 获取图片验证码
 async function register_send_picture_captcha_data() {
-	let data = await axios.get(`${API_BASE}` + '/user/get_picture_captcha')
+	let data = await request.get(`${API_BASE}` + '/user/get_picture_captcha')
 	register_picture_captcha_url.value = `${API_BASE}` + data.data.img_url
 	registerForm.key = data.data.key
 }
@@ -38,7 +37,7 @@ register_send_picture_captcha_data()
 // 获取邮箱验证码
 let register_email_captcha_countdown = ref<any>('获取验证码')
 async function register_send_email_captcha() {
-	let data = await axios.post(`${API_BASE}` + '/user/get_email_captcha',{
+	let data = await request.post(`${API_BASE}` + '/user/get_email_captcha',{
 		email: registerForm.email
 	})
 	if (data.data.status == 1) {
@@ -67,7 +66,7 @@ async function register_send_register_form() {
 		showFailToast('密码长度应为6-20位')
 		return
 	}
-	let data = await axios.post(`${API_BASE}` + '/user/register', registerForm)
+	let data = await request.post(`${API_BASE}` + '/user/register', registerForm)
 	if (data.data.status == 1) {
 		setToken(data.data.token)
 		router.push('/')
@@ -92,7 +91,7 @@ const loginForm = reactive({
 let login_picture_captcha_url = ref<string>('')
 // 获取图片验证码
 async function login_send_picture_captcha_data() {
-	let data = await axios.get(`${API_BASE}` + '/user/get_picture_captcha')
+	let data = await request.get(`${API_BASE}` + '/user/get_picture_captcha')
 	login_picture_captcha_url.value = `${API_BASE}` + data.data.img_url
 	loginForm.key = data.data.key
 }
@@ -107,7 +106,7 @@ async function login_send_form() {
 		showFailToast('密码长度应为6-20位')
 		return
 	}
-	let data = await axios.post(`${API_BASE}` + '/user/login_by_pwd', loginForm)
+	let data = await request.post(`${API_BASE}` + '/user/login_by_pwd', loginForm)
 	if (data.data.status == 1) {
 		setToken(data.data.token)
 		router.push('/')
@@ -134,7 +133,7 @@ let passwordlessLogin_picture_captcha_url = ref<string>('')
 
 // 免密登录 获取图片验证码
 async function passwordlessLogin_send_picture_captcha_data() {
-	let data = await axios.get(`${API_BASE}` + '/user/get_picture_captcha')
+	let data = await request.get(`${API_BASE}` + '/user/get_picture_captcha')
 	passwordlessLogin_picture_captcha_url.value = `${API_BASE}` + data.data.img_url
 	passwordlessLoginForm.key = data.data.key
 }
@@ -143,7 +142,7 @@ passwordlessLogin_send_picture_captcha_data()
 // 免密登录 获取邮箱验证码
 let passwordlessLogin_email_captcha_countdown = ref<any>('获取验证码')
 async function passwordlessLogin_send_email_captcha() {
-	let data = await axios.post(`${API_BASE}` + '/user/get_email_captcha',{
+	let data = await request.post(`${API_BASE}` + '/user/get_email_captcha',{
 		email: passwordlessLoginForm.email
 	})
 	if (data.data.status == 1) {
@@ -168,7 +167,7 @@ async function passwordlessLogin_send_form() {
 		showFailToast('请填写完整信息')
 		return
 	}
-	let data = await axios.post(`${API_BASE}` + '/user/login_by_email', passwordlessLoginForm)
+	let data = await request.post(`${API_BASE}` + '/user/login_by_email', passwordlessLoginForm)
 	if (data.data.status == 1) {
 		setToken(data.data.token)
 		router.push('/')

@@ -6,8 +6,9 @@ export default { name: 'Home' }
 </script>
 
 <template>
-	<div>
+	<div class="page">
 		首页
+		
 		<h1>首页测试</h1>
 		<h1>首页测试</h1>
 		<h1>首页测试</h1>
@@ -59,4 +60,9 @@ export default { name: 'Home' }
 	</div>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.page{
+	height: 100%;
+	overflow-y: auto; // 中间滚动
+}
+</style>
