@@ -12,7 +12,7 @@ const request = axios.create({
 request.interceptors.request.use(
     (config) => {
         const token = getToken()
-        if (token) config.headers.Authorization = `Bearer ${token}`;
+        config.headers.Authorization = `Bearer ${token}`;
         return config
     },
     (error) => Promise.reject(error),
@@ -37,7 +37,7 @@ request.interceptors.response.use(
         }
 
         if (status === 403) {
-            return Promise.reject({ status: 0, msg: '越权' })
+            return Promise.reject({ status: 0, msg: '没权限','data':data })
         }
 
         // 其他非 2xx 统一 reject

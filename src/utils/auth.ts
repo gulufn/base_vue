@@ -7,7 +7,7 @@ export function setToken(token: string) {
 
 // 获取 token
 export function getToken(): string | null {
-  return localStorage.getItem(TOKEN_KEY)
+  return localStorage.getItem(TOKEN_KEY) || ''
 }
 
 // 删除 token

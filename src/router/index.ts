@@ -28,7 +28,15 @@ const routes = [
 		name: 'user',
 		path: '/user',
 		component: user_page,
-		meta: { title: '我的' }
+		meta: { title: '我的' },
+		children: [
+			{
+				name: 'user_setting',
+				path: 'user_setting',
+				component: () => import('@/pages/UserSetting.vue'),
+				meta: { title: '账号设置' }
+			},
+		]
 	}
 ]
 
