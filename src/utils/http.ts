@@ -24,7 +24,7 @@ request.interceptors.response.use(
     ({ response }) => {
         // 网络错误兜底
         if (!response) {
-            return Promise.reject({ status: 0, msg: '网络异常' })
+            return Promise.reject({ data:{status: 0, msg: '网络异常'} })
         }
 
         const { status ,data} = response
