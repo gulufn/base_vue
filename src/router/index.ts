@@ -35,6 +35,11 @@ const routes = [
 				path: 'user_setting',
 				component: () => import('@/pages/UserSetting.vue'),
 				meta: { title: '账号设置' }
+			},{
+				name: 'music_collect',
+				path: 'music_collect',
+				component: () => import('@/pages/MusicCollect.vue'),
+				meta: { title: '音乐收藏' }
 			},
 		]
 	}

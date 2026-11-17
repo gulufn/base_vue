@@ -44,6 +44,6 @@ if(!store.isLoggedIn){
 <style lang="scss" scoped>
 .page{
 	height: 100%;
-	overflow-y: auto; // 中间滚动
+	// overflow-y: auto; // 中间滚动
 }
 </style>
