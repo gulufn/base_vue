@@ -148,7 +148,7 @@ async function sendMessage() {
 					store.chat_news.push(answer.data.data)
 					break
 				}
-				if(n>=10){
+				if(n>=300){
 					break
 				}
 				n=n+1;
@@ -182,7 +182,7 @@ async function sendMessage() {
 			<!-- 只有 listReady 后才渲染 van-list，彻底避免初始化自动 @load -->
 			<van-list v-if="listReady" v-model:loading="loading" :finished="finished" direction="up"
 				finished-text="没有更多了" @load="onLoad">
-				<van-cell style="max-height: 180px;min-height: 80px;" v-for="item in store.chat_news" :key="item.id"
+				<van-cell style="max-height: 700px;min-height: 80px;" v-for="item in store.chat_news" :key="item.id"
 					:title="item.content" :label="item.created_at"
 					:class="item.role == 1 ? 'align-right' : 'align-left'" />
 			</van-list>

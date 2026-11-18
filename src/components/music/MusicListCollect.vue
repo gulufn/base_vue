@@ -2,7 +2,7 @@
 export default { name: 'MusicListCollect' }
 </script>
 <script setup lang="ts">
-import { ref, watch, computed } from 'vue'
+import { ref, watch, computed,watchEffect } from 'vue'
 import { API_BASE, API_BASE_MUSIC } from '@/config.ts'
 import { showFailToast } from 'vant';
 import { useSearchStore } from '@/stores/search'
@@ -95,11 +95,44 @@ async function toggleFavorite(item: any) {
 		showFailToast(data.data.msg)
 	}
 }
-
+let list_index = ref(0)
 let musicUrl = ref('')
-function bofang(name: string) {
+function bofang(name: string,index:number) {
 	musicUrl.value = API_BASE_MUSIC + '/music/' + name + '?key=' + key.value
+	list_index.value = index
 }
+
+
+// 核心：播完切换下一首
+const handleEnded = () => {
+	playNext()
+}
+
+async function playNext() {
+	// console.log(store.listMusic[list_index.value]['name'])
+	// console.log(list_index.value)
+	list_index.value = list_index.value + 1
+	if (list_index.value >= store.listMusic.length) {
+		await get_music_list()
+	}
+	musicUrl.value = API_BASE_MUSIC + '/music/' + store.listMusic[list_index.value]['name'] + '?key=' + key.value
+}
+
+//按空格暂停或播放音乐
+const audioRef = ref(null)
+watchEffect((onCleanup) => {
+	const onKey = (e:any) => {
+		if (e.code !== 'Space') return
+		e.preventDefault()
+		const a: any = audioRef.value
+		a.paused ? a.play() : a.pause()
+	}
+	window.addEventListener('keydown', onKey)
+	onCleanup(() => window.removeEventListener('keydown', onKey))
+})
+
+
+
 </script>
 
 <template>
@@ -109,7 +142,7 @@ function bofang(name: string) {
 				<van-list v-model:loading="loading" :finished="finished" finished-text="没有更多了" @load="onLoad"
 					:offset="50">
 					<van-cell v-for="(item,index) in store.listMusic" :key="`${item.id}-${index}`" :title="item.title" :label="item.artist"
-						@click="bofang(item.name)">
+						@click="bofang(item.name,index)" :class="{ active: list_index === index }">
 						<template #right-icon>
 							<van-icon :name="item.is_favorite ? 'star' : 'star-o'"
 								:color="item.is_favorite ? '#ff5000' : '#c8c9cc'" size="20"
@@ -122,7 +155,7 @@ function bofang(name: string) {
 		</div>
 		<!-- 播放器：固定在底部 -->
 		<div class="player-bar">
-			<audio :src="musicUrl" controls autoplay></audio>
+			<audio :src="musicUrl" controls autoplay @ended="handleEnded" ref="audioRef"></audio>
 		</div>
 	</div>
 </template>
@@ -139,6 +172,10 @@ function bofang(name: string) {
 		overflow-y: auto; // 中间滚动
 		flex: 1; // 吃掉剩余高度 
 		min-height: 0; //容器允许的最小高度
+		.active {
+			background: #e7e9eb;
+			// color: #fff;
+		}
 	}
 
 	.player-bar {
